@@ -1,10 +1,10 @@
 import re
 
 def llenar_ranuras(oracion):
-    # Patrones para identificar las ranuras
-    patron_origen = r'(de|desde)\s([\w\s]+)'
-    patron_destino = r'(a|hacia)\s([\w\s]+)'
-    patron_fecha = r'(el|para|en)\s([\d]{1,2}\sde\s\w+|\d{1,2}/\d{1,2}/\d{4}|\d{1,2}-\d{1,2}-\d{4})'
+    # Patrones mejorados para identificar las ranuras
+    patron_origen = r'\b(?:de|desde)\s([\w\s]+?)\b(?:a|hacia)\b'
+    patron_destino = r'\b(?:a|hacia)\s([\w\s]+?)\b(?:el|para|en|el|la)\b'
+    patron_fecha = r'\b(?:el|para|en)\s([\d]{1,2}\sde\s\w+|\d{1,2}/\d{1,2}/\d{4}|\d{1,2}-\d{1,2}-\d{4})'
 
     # Buscar coincidencias en la oración
     match_origen = re.search(patron_origen, oracion)
@@ -12,9 +12,9 @@ def llenar_ranuras(oracion):
     match_fecha = re.search(patron_fecha, oracion)
 
     # Extraer valores
-    origen = match_origen.group(2).strip() if match_origen else 'No encontrado'
-    destino = match_destino.group(2).strip() if match_destino else 'No encontrado'
-    fecha = match_fecha.group(2).strip() if match_fecha else 'No encontrado'
+    origen = match_origen.group(1).strip() if match_origen else 'No encontrado'
+    destino = match_destino.group(1).strip() if match_destino else 'No encontrado'
+    fecha = match_fecha.group(1).strip() if match_fecha else 'No encontrado'
 
     # Retornar los resultados como un diccionario
     return {
@@ -25,7 +25,7 @@ def llenar_ranuras(oracion):
 
 def mostrar_descripcion():
     print("\nDescripción del programa:")
-    print("Este programa permite identificar tres elementos clave en frases relacionadas con reservas de viajes para pasarlas a ranuras:")
+    print("Este programa permite identificar tres elementos clave en frases relacionadas con reservas de viajes:")
     print("- Origen: El lugar desde donde se inicia el viaje.")
     print("- Destino: El lugar al que se quiere viajar.")
     print("- Fecha: La fecha del viaje, en formatos como '10 de diciembre', '10/12/2024' o '10-12-2024'.")
